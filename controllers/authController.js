@@ -31,7 +31,7 @@ const signupController = async (req, res) => {
       JWT_SECRET,
       { expiresIn: "7 d" }
     );
-    return res
+    res
       .status(201)
       .json({ msg: "Your account successfully created", newUser, token });
   } catch (error) {
