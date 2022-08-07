@@ -31,7 +31,7 @@ const signupController = async (req, res) => {
       JWT_SECRET,
       { expiresIn: "7 d" }
     );
-    res
+    return res
       .status(201)
       .json({ msg: "Your account successfully created", newUser, token });
   } catch (error) {
@@ -87,7 +87,7 @@ const updateProfile = async (req, res) => {
         new: true,
       }
     );
-    res.status(200).json({
+    return res.status(200).json({
       msg: "Profile update successfull",
       updateUser: updateProfileInfo,
     });
