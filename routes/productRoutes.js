@@ -23,7 +23,7 @@ router.post(
 router.get("/", getAllProductController);
 router.get("/allOrder", authorized,  getAllOrders);
 router.put("/updateOrder/:id", authorized,  updateOrderStatus);
-router.get("/allReview", authorized, getAllReview);
+router.get("/allReview", getAllReview);
 router.put(
   "/updateProduct/:productId",
   authorized,
