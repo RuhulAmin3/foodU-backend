@@ -59,7 +59,7 @@ const loginController = async (req, res) => {
           JWT_SECRET,
           { expiresIn: "7 d" }
         );
-        res.status(200).json({ msg: "Login Successfull", token, user });
+        res.json({ msg: "Login Successfull", token, user });
       } else {
         return res.status(400).json({ error: "Password does not matched" });
       }
