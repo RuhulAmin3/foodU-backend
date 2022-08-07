@@ -7,8 +7,8 @@ const { JWT_SECRET } = require("../config/envConfig");
 
 // sign up
 const signupController = async (req, res) => {
+  const { fullname, email, password, profilePic } = req.body;
   try {
-    const { fullname, email, password, profilePic } = req.body;
     const errors = validationResult(req).formatWith(errorFormater);
     if (!errors.isEmpty()) {
       return res.status(400).json({
@@ -42,8 +42,8 @@ const signupController = async (req, res) => {
 
 // login
 const loginController = async (req, res) => {
+  const { email, password } = req.body;
   try {
-    const { email, password } = req.body;
     const errors = validationResult(req).formatWith(errorFormater);
     if (!errors.isEmpty()) {
       return res.status(400).json({
@@ -59,7 +59,7 @@ const loginController = async (req, res) => {
           JWT_SECRET,
           { expiresIn: "7 d" }
         );
-        return res.json({ msg: "Login Successfull", token, user });
+        return res.status(200).json({ msg: "Login Successfull", token, user });
       } else {
         return res.status(400).json({ error: "Password does not matched" });
       }
