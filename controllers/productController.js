@@ -166,7 +166,7 @@ const orderController = async (req, res) => {
 // ssl order controller
 const orderBySSLCommerz = async (req, res) => {
   try {
-    const {checkOutInfo} = req.body
+    const { checkOutInfo } = req.body
     const data = {
       total_amount: checkOutInfo.totalCost,
       currency: 'BDT',
@@ -195,15 +195,15 @@ const orderBySSLCommerz = async (req, res) => {
       ship_city: 'Dhaka',
       ship_state: 'Dhaka',
       ship_postcode: 1000,
-      ship_country: 'Bangladesh', 
+      ship_country: 'Bangladesh',
     };
-    const sslcommer = new SSLCommerzPayment(store_id, store_passwd,false) //true for live default false for sandbox
+    const sslcommer = new SSLCommerzPayment(store_id, store_passwd, false) //true for live default false for sandbox
     sslcommer.init(data).then(data => {
-        if(data.GatewayPageURL){
-          res.json(data.GatewayPageURL)
-        } else{
-          res.status(400).json("Payment Session failed");
-        }
+      if (data.GatewayPageURL) {
+        res.json(data.GatewayPageURL)
+      } else {
+        res.status(400).json("Payment Session failed");
+      }
     });
   } catch (error) {
     console.log(error);
@@ -213,7 +213,6 @@ const orderBySSLCommerz = async (req, res) => {
 
 // ssl success route
 const redirectSuccessRoute = async (req, res) => {
-  console.log(req.body)
   return res.status(200).redirect(`https://food-u.netlify.app/confirmOrder`)
 }
 
