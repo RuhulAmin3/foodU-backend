@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-// const db = `mongodb://localhost:27017/poco`;
+// const db = `mongodb://localhost:27017/foodu`;
 const { DB_USER, DB_PASS } = require("../config/envConfig");
 const connectDB = async () => {
   try {

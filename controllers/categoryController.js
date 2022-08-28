@@ -83,6 +83,7 @@ const updateCategoryController = async (req, res) => {
     return res.status(500).json("Internal Server Error");
   }
 };
+
 // delete category
 const deleteCategoryController = async (req, res) => {
   try {

@@ -6,7 +6,11 @@ const { STRIPE_SECRET } = require("../config/envConfig");
 const Order = require("../models/Order");
 const User = require("../models/User");
 const stripe = require("stripe")(STRIPE_SECRET);
- 
+const SSLCommerzPayment = require('sslcommerz')
+const store_id = 'foodu630a1f4b5f276'
+const store_passwd = 'foodu630a1f4b5f276@ssl'
+// const is_live = false //true for live, false for sandbox
+
 // create product
 const createProductController = async (req, res) => {
   try {
@@ -79,7 +83,7 @@ const deleteProductController = async (req, res) => {
 const getAllProductController = async (req, res) => {
   try {
     const allProducts = await Product.find({}).populate({
-      path: "review", 
+      path: "review",
       populate: {
         path: "user",
       },
@@ -160,6 +164,69 @@ const orderController = async (req, res) => {
   }
 };
 
+// ssl order controller
+const orderBySSLCommerz = async (req, res) => {
+  try {
+    const {checkOutInfo} = req.body
+    const data = {
+      total_amount: checkOutInfo.totalCost,
+      currency: 'BDT',
+      tran_id: Math.floor(new Date().getTime() * Math.random() * 10000), // use unique tran_id for each api call
+      success_url: 'http://localhost:5000/api/v1/product/success',
+      fail_url: 'http://localhost:5000/api/v1/product/fail',
+      cancel_url: 'http://localhost:5000/api/v1/product/cancel',
+      ipn_url: 'http://localhost:3000/ipn',
+      shipping_method: 'Courier',
+      product_name: 'Computer.',
+      product_category: 'Electronic',
+      product_profile: 'general',
+      cus_name: checkOutInfo.fullname,
+      cus_email: checkOutInfo.email,
+      cus_add1: checkOutInfo.address,
+      cus_add2: 'Dhaka',
+      cus_city: checkOutInfo.city,
+      cus_state: 'Dhaka',
+      cus_postcode: checkOutInfo.zip,
+      cus_country: checkOutInfo.country,
+      cus_phone: '01711111111',
+      cus_fax: '01711111111',
+      ship_name: 'Customer Name',
+      ship_add1: 'Dhaka',
+      ship_add2: 'Dhaka',
+      ship_city: 'Dhaka',
+      ship_state: 'Dhaka',
+      ship_postcode: 1000,
+      ship_country: 'Bangladesh', 
+    };
+    const sslcommer = new SSLCommerzPayment(store_id, store_passwd,false) //true for live default false for sandbox
+    sslcommer.init(data).then(data => {
+        if(data.GatewayPageURL){
+          res.json(data.GatewayPageURL)
+        } else{
+          res.status(400).json("Payment Session failed");
+        }
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json("Internal server error");
+  }
+}
+
+// ssl success route
+const redirectSuccessRoute = async (req, res) => {
+  return res.status(200).redirect(`https://food-u.netlify.app/confirmOrder`)
+}
+
+// ssl fail route
+const redirectFailRoute = async (req, res) => {
+  return res.status(200).redirect(`https://food-u.netlify.app`)
+}
+
+// ssl cancle route
+const redirectCancelRoute = async (req, res) => {
+  return res.status(200).redirect(`https://food-u.netlify.app`)
+}
+
 // save order info controller
 const saveCheckOutInfo = async (req, res) => {
   try {
@@ -209,7 +276,6 @@ const saveCheckOutInfo = async (req, res) => {
         new: true,
       }
     );
-    console.log(updateUser);
     return res.status(200).json({ msg: "Success", saveOrder, updateUser });
   } catch (error) {
     console.log(error);
@@ -267,6 +333,10 @@ module.exports = {
   saveCheckOutInfo,
   addProductReview,
   orderController,
+  orderBySSLCommerz,
   getAllReview,
   updateOrderStatus,
+  redirectSuccessRoute,
+  redirectFailRoute,
+  redirectCancelRoute
 };

@@ -11,6 +11,10 @@ const {
   getAllOrders,
   getAllReview,
   updateOrderStatus,
+  orderBySSLCommerz,
+  redirectSuccessRoute,
+  redirectFailRoute,
+  redirectCancelRoute,
 } = require("../controllers/productController");
 const productValidation = require("../validations/productValidation");
 const authorized = require("../middlewares/authorized");
@@ -21,8 +25,9 @@ router.post(
   createProductController
 );
 router.get("/", getAllProductController);
-router.get("/allOrder", authorized,  getAllOrders);
-router.put("/updateOrder/:id", authorized,  updateOrderStatus);
+router.post("/init", authorized, orderBySSLCommerz);
+router.get("/allOrder", authorized, getAllOrders);
+router.put("/updateOrder/:id", authorized, updateOrderStatus);
 router.get("/allReview", getAllReview);
 router.put(
   "/updateProduct/:productId",
@@ -30,6 +35,9 @@ router.put(
   productValidation,
   updateProductController
 );
+router.post("/success",  redirectSuccessRoute)
+router.post("/fail",  redirectFailRoute)
+router.post("/cancel",  redirectCancelRoute)
 router.delete("/deleteProduct/:productId", authorized, deleteProductController);
 router.get("/:productId", getSingleProductController);
 router.post("/review/:productId", authorized, addProductReview);
