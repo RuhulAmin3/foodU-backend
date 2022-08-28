@@ -9,7 +9,6 @@ const stripe = require("stripe")(STRIPE_SECRET);
 const SSLCommerzPayment = require('sslcommerz')
 const store_id = 'foodu630a1f4b5f276'
 const store_passwd = 'foodu630a1f4b5f276@ssl'
-// const is_live = false //true for live, false for sandbox
 
 // create product
 const createProductController = async (req, res) => {
@@ -214,6 +213,7 @@ const orderBySSLCommerz = async (req, res) => {
 
 // ssl success route
 const redirectSuccessRoute = async (req, res) => {
+  console.log(req.body)
   return res.status(200).redirect(`https://food-u.netlify.app/confirmOrder`)
 }
 
