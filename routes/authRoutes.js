@@ -16,7 +16,7 @@ router.post("/signup", signupValidation, signupController);
 router.post("/login", loginController);
 router.get("/allUsers",  getAllUser);
 router.get("/wishlist/:productId",  productWishlist);
-router.get("/singleUser",  singleUser);
+router.get("/singleUser", authorized, singleUser);
 router.put("/updateProfile",  updateProfile);
 router.put("/changePassword",  changePassword);
 router.put("/updateRole/:id",  updateUserRole); 
