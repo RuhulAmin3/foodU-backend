@@ -15,7 +15,7 @@ const authorized = require("../middlewares/authorized");
 router.post("/signup", signupValidation, signupController);
 router.post("/login", loginController);
 router.get("/allUsers",  getAllUser);
-router.get("/wishlist/:productId",  productWishlist);
+router.get("/wishlist/:productId", authorized, productWishlist);
 router.get("/singleUser", authorized, singleUser);
 router.put("/updateProfile",  updateProfile);
 router.put("/changePassword",  changePassword);
